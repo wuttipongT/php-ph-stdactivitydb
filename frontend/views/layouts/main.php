@@ -28,23 +28,23 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => Yii::$app->name['first'] .' '. Yii::$app->name['second'],//'My Company',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
+        ['label' => 'หน้าแรก', 'url' => ['/site/index']],
+        ['label' => 'เกี่ยวกับไซต์', 'url' => ['/site/about']],
+        ['label' => 'ติดต่อเรา', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'สมัครสมาชิก', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'เข้าสู่ระบบ', 'url' => ['/site/login']];
     } else {
         $menuItems[] = [
-            'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+            'label' => 'ออกจากระบบ (' . Yii::$app->user->identity->username . ')',
             'url' => ['/site/logout'],
             'linkOptions' => ['data-method' => 'post']
         ];
@@ -67,7 +67,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; <?= Yii::$app->name['first'].' '. Yii::$app->name['second'];?> <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

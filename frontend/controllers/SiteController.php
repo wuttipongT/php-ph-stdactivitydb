@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\LoginForm;
+use common\models\Products;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -72,21 +73,44 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+      //  $model = new Products();
+       // $comUnit = \frontend\models\Products::findBySql('where ProductId = 1');
+                //findBy(array("ProductID"=>'1'));
+
+       //print_r($comUnit);
+       // var_dump($comUnit);
         return $this->render('index');
     }
 
     /**
      * Logs in a user.
      *
-     * @return mixed
+     * @return mixedfindByAttributes
      */
+    public function actionSample(){
+        $data = \frontend\models\Products::findOne(array('ProductID'=>1));
+        //print_r($data);
+        
+
+        
+       // $arr = array();
+      //  $arr['ProductID'] = $data->ProductID;
+       // $arr['ProductSKU'] = $data->ProductSKU;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            'ProductID' => $data->ProductID,
+            'ProductSKU' => $data->ProductSKU,
+        ];
+    }
+    
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        $model = new LoginForm();
+        $model = new LoginForm();  
+       
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
