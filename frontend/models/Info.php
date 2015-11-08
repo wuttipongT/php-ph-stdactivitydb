@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-
+use common\models\Advisors;
 /**
  * This is the model class for table "tb_student".
  *
@@ -47,8 +47,8 @@ class Info extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Student_Id', 'Student_Name', 'Student_LastName', 'Image_Path', 'Address1', 'Address2', 'Phone1', 'Phone2', 'Name_Father', 'Name_Mother', 'Name_Parent', 'Phone_Parent', 'Work_Address_Parent', 'Advisors_Id', 'Buddy_Phone', 'Hobby', 'Ambition', 'Favorite_Sport', 'Genius', 'ROTCS', 'Award'], 'required'],
-            [['Image_Path', 'Address1', 'Address2', 'Work_Address_Parent', 'Ambition', 'Genius', 'ROTCS', 'Award'], 'string'],
+            [['Student_Id', 'Student_Name', 'Student_LastName', 'Image_Path', 'Address1', 'Address2', 'Phone1', 'Phone2', 'Name_Father', 'Name_Mother', 'Name_Parent', 'Phone_Parent', 'Work_Address_Parent', 'Advisors_Id', 'Congenital_Disease','Be_Allergic','Food_Allergy','Buddy','Buddy_Phone', 'Hobby', 'Ambition', 'Favorite_Sport', 'Genius', 'ROTCS', 'Award'], 'required'],
+            [['Image_Path', 'Address1', 'Address2', 'Work_Address_Parent', 'Ambition', 'Genius', 'ROTCS', 'Award','str'], 'string'],
             [['Advisors_Id'], 'integer'],
             [['Clement_Military'], 'safe'],
             [['Student_Id'], 'string', 'max' => 11],
@@ -90,5 +90,8 @@ class Info extends \yii\db\ActiveRecord
             'Clement_Military' => 'Clement  Military',
             'Award' => 'Award',
         ];
+    }
+    public static function find(){
+        return new \app\models\InfoQuery(get_called_class());
     }
 }

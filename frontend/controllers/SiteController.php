@@ -1,9 +1,9 @@
 <?php
+
 namespace frontend\controllers;
 
 use Yii;
 use common\models\LoginForm;
-use common\models\Products;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -13,21 +13,21 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
+use \yii\widgets\ActiveForm;
+use \yii\web\Response;
 /**
  * Site controller
  */
-class SiteController extends Controller
-{
+class SiteController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup',],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -53,8 +53,7 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-    public function actions()
-    {
+    public function actions() {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -71,15 +70,23 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
-    {
-      //  $model = new Products();
-       // $comUnit = \frontend\models\Products::findBySql('where ProductId = 1');
-                //findBy(array("ProductID"=>'1'));
+    public function actionIndex() {
+        //  $model = new Products();
+        // $comUnit = \frontend\models\Products::findBySql('where ProductId = 1');
+        //findBy(array("ProductID"=>'1'));
+        //print_r($comUnit);
+        // var_dump($comUnit);
+        if (!\Yii::$app->user->isGuest) {
+            //return $this->goHome();
+            $this->redirect(Yii::$app->urlManager->createUrl(['/info/index']));
+        }
 
-       //print_r($comUnit);
-       // var_dump($comUnit);
-        return $this->render('index');
+        $model = new LoginForm();
+        $model2 = new SignupForm();
+        return $this->render('index', [
+                    'model' => $model,
+                    'model2' => $model2,
+        ]);
     }
 
     /**
@@ -87,36 +94,73 @@ class SiteController extends Controller
      *
      * @return mixedfindByAttributes
      */
-    public function actionSample(){
-        $data = \frontend\models\Products::findOne(array('ProductID'=>1));
+    public function actionSample() {
+        $data = \frontend\models\Products::findOne(array('ProductID' => 1));
         //print_r($data);
-        
-
-        
-       // $arr = array();
-      //  $arr['ProductID'] = $data->ProductID;
-       // $arr['ProductSKU'] = $data->ProductSKU;
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        // $arr = array();
+        //  $arr['ProductID'] = $data->ProductID;
+        // $arr['ProductSKU'] = $data->ProductSKU;
+        \Yii::$app->response->format = Response::FORMAT_JSON;
         return [
             'ProductID' => $data->ProductID,
             'ProductSKU' => $data->ProductSKU,
         ];
     }
-    
-    public function actionLogin()
-    {
+
+    public function actionLogin() {
+        
+        
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            //return $this->goHome();
+            $this->redirect(Yii::$app->urlManager->createUrl(['/info/index']));
         }
 
-        $model = new LoginForm();  
-       
+        $model = new LoginForm();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())&& $model->login()) {
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+
+                $json = [
+                    ['loginform-password'=>'success','redirect' => Yii::$app->urlManager->createUrl(['/info/index'])],
+                ];
+                return $json;
+        }else{
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            //return $this->goBack();
+            return $this->redirect(Yii::$app->urlManager->createUrl(['/info/index']));
         } else {
             return $this->render('login', [
-                'model' => $model,
+                        'model' => $model,
             ]);
+        }
+    }
+
+    public function actionLajax() {
+        $model = new LoginForm();
+
+
+if(Yii::$app->request->isAjax){
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+
+                $json = [
+                    ['loginform-password'=>'success','redirect' => Yii::$app->urlManager->createUrl(['/info/index'])],
+                ];
+                return $json;
+        }
+//echo  Yii::$app->request->post('isAjax');  
+
+
+        if (Yii::$app->request->post('isAjax') === 1 && $model->login()) {
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+
+            $json = [
+                ['redirect' => Yii::$app->urlManager->createUrl(['/info/index'])],
+            ];
+            return $json;
         }
     }
 
@@ -125,8 +169,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionLogout()
-    {
+    public function actionLogout() {
         Yii::$app->user->logout();
 
         return $this->goHome();
@@ -137,8 +180,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionContact()
-    {
+    public function actionContact() {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
@@ -150,7 +192,7 @@ class SiteController extends Controller
             return $this->refresh();
         } else {
             return $this->render('contact', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -160,8 +202,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionAbout()
-    {
+    public function actionAbout() {
         return $this->render('about');
     }
 
@@ -170,19 +211,19 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionSignup()
-    {
+    public function actionSignup() {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
+                    //return $this->goHome();
+                    $this->redirect(Yii::$app->request->baseUrl . '/info/index');
                 }
             }
         }
 
         return $this->render('signup', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -191,8 +232,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionRequestPasswordReset()
-    {
+    public function actionRequestPasswordReset() {
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
@@ -205,7 +245,7 @@ class SiteController extends Controller
         }
 
         return $this->render('requestPasswordResetToken', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -216,8 +256,7 @@ class SiteController extends Controller
      * @return mixed
      * @throws BadRequestHttpException
      */
-    public function actionResetPassword($token)
-    {
+    public function actionResetPassword($token) {
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
@@ -231,8 +270,19 @@ class SiteController extends Controller
         }
 
         return $this->render('resetPassword', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
-    
+
+    function actionShowmodal() {
+        $js = '$("#modal").modal("show")';
+        $this->getView()->registerJs($js);
+        $model = new LoginForm();
+        $model2 = new SignupForm();
+        return $this->render('index', [
+                    'model' => $model,
+                    'model2' => $model2,
+        ]);
+    }
+
 }

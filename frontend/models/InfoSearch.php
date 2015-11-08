@@ -19,7 +19,7 @@ class InfoSearch extends Info
     {
         return [
             [['Student_Index', 'Advisors_Id'], 'integer'],
-            [['Student_Id', 'Student_Name', 'Student_LastName', 'Image_Path', 'Address1', 'Address2', 'Phone1', 'Phone2', 'Name_Father', 'Name_Mother', 'Name_Parent', 'Phone_Parent', 'Work_Address_Parent', 'Buddy_Phone', 'Hobby', 'Ambition', 'Favorite_Sport', 'Genius', 'ROTCS', 'Clement_Military', 'Award'], 'safe'],
+            [['Student_Id', 'Student_Name', 'Student_LastName', 'Image_Path', 'Address1', 'Address2', 'Phone1', 'Phone2', 'Name_Father', 'Name_Mother', 'Name_Parent', 'Phone_Parent', 'Work_Address_Parent', 'Congenital_Disease','Be_Allergic','Food_Allergy','Buddy', 'Buddy_Phone', 'Hobby', 'Ambition', 'Favorite_Sport', 'Genius', 'ROTCS', 'Clement_Military', 'str'], 'safe'],
         ];
     }
 
@@ -80,7 +80,7 @@ class InfoSearch extends Info
             ->andFilterWhere(['like', 'Favorite_Sport', $this->Favorite_Sport])
             ->andFilterWhere(['like', 'Genius', $this->Genius])
             ->andFilterWhere(['like', 'ROTCS', $this->ROTCS])
-            ->andFilterWhere(['like', 'Award', $this->Award]);
+            ->andFilterWhere(['like', 'str', $this->str]);
 
         return $dataProvider;
     }

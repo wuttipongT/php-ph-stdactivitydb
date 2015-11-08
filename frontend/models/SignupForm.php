@@ -56,4 +56,11 @@ class SignupForm extends Model
 
         return null;
     }
+    public function attributeLabels() {
+        return [
+            'username'=> 'หมายเลขประจำตัวนิสิต',
+            'email'=>'อีเมลล์นิสิต',
+            'password'=>'รหัสผ่าน',
+        ];
+    }
 }

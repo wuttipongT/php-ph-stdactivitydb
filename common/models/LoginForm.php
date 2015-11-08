@@ -75,4 +75,12 @@ class LoginForm extends Model
 
         return $this->_user;
     }
+    public function attributeLabels(){
+         return [
+             'username'=>'หมายเลขประจำตัวนิสิต',
+             'password'=>'รหัสผ่าน',
+             'rememberMe'=>'ให้ฉันอยู่ในระบบต่อไป',
+         ];
+         
+     }
 }

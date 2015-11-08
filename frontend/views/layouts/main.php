@@ -22,7 +22,8 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+<body>Body() ?>
+
 <?php $this->beginBody() ?>
 
 <div class="wrap">
@@ -35,13 +36,13 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'หน้าแรก', 'url' => ['/site/index']],
-        ['label' => 'เกี่ยวกับไซต์', 'url' => ['/site/about']],
-        ['label' => 'ติดต่อเรา', 'url' => ['/site/contact']],
+        //['label' => 'หน้าแรก', 'url' => ['/site/index']],
+        //['label' => 'เกี่ยวกับไซต์', 'url' => ['/site/about']],
+        //['label' => 'ติดต่อเรา', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'สมัครสมาชิก', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'เข้าสู่ระบบ', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'สมัครสมาชิก', 'url' => ['/site/showmodal']];
+        //$menuItems[] = ['label' => 'เข้าสู่ระบบ', 'url' => ['/site/login']];
     } else {
         $menuItems[] = [
             'label' => 'ออกจากระบบ (' . Yii::$app->user->identity->username . ')',

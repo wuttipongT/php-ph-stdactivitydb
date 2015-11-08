@@ -11,7 +11,7 @@ use Yii;
  * @property string $Scholarship_Name
  * @property string $Status
  */
-class Scholarship extends \yii\db\ActiveRecord
+class MSScholarship extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
