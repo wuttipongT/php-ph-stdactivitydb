@@ -36,7 +36,7 @@ $this->title = 'My Yii Application';
                                     'id' => 'login-form',
                                     'action' => Yii::$app->urlManager->createUrl(['/site/login']),
                                     'options' => ['class' => 'edit_form'],
-                                    'enableAjaxValidation' => false,
+                                    'enableAjaxValidation' => true,
                                     'enableClientValidation' => true,
                         ]);
                         ?>

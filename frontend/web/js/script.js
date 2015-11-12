@@ -7,9 +7,15 @@
 
 (function ($) {
 
-    $("ul.mn-left-ul li > a").on("click", function (e) {
+    $(".mn-left a").on("click", function (e) {
         e.preventDefault();
-
+     
+        
+        $.each($(".mn-left a"), function(){
+             $(this).hasClass('active') ? $(this).removeClass('active') : '';
+        });
+        
+          $(this).addClass('active'); 
         $.ajax({
             url: $(this).attr('href'),
             cache: false,
@@ -32,34 +38,46 @@
         // send data to actionSave by ajax request.
         //return false; // Cancel form submitting.
     });
+    
 
-    $('.edit_form').submit(function (e) {
-        //e.preventDefault();
+   /*
+    $(document).on('submit','form.edit_form',function (e) {
+        e.preventDefault();
         var form = $(this);
         //if (form.find('.has-error').length) {
         // return false;
         //}
-
+        
         $.ajax({
             type: form.attr("method"),
             url: form.attr("action"),
             data: form.serialize(),
-         //   contentType: "application/json; charset=UTF-8",
-          // dataType: 'json',
+            //contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
             cache: false,
-            success: function (response) {
-                /*if(response["loginform-password"] != "success"){
-                    for ($data in response) {
-                        $('.field-' + $data).removeClass('has-success').addClass('has-error');
-                        $('.has-error .help-block-error').text(response[$data] + "");
-                        
+            success : function (response) {
+                
+                //arr.push($.map(response, function(el) { return el })); //Object.keys(response).map(function(k) { return response[k] });
+             
+               
+                $.each(response, function (i, item) {
+
+                    if (item["loginform-password"] == "success") {
+                        for ($data in response) {
+                            $('.field-' + $data).removeClass('has-error').addClass('has-success');
+                            $('.has-error .help-block-success').text(response[$data] + "");
+
+                        }
+                    } else {
+                        for ($data in response) {
+                            $('.field-' + $data).removeClass('has-success').addClass('has-error');
+                            $('.has-error .help-block-error').text(response[$data] + "");
+
+                        }
                     }
-                }
-                if(response["loginform-password"] == "success"){
-                     window.location.href = response['redirect'];
-                     
-                }*/
-                console.log(response);
+                });
+               console.log(response);
+                //console.log(arr);
                /* if(!$.isEmptyObject(response)){
                     
                 }
@@ -88,17 +106,21 @@
                  }).length;
                  if (len > 0) {
                  
-                 }*/
+                 }
             },
             /*complete: function (xhr, status) {
                 console.log('c');
             },
             error: function (xhr, status) {
                 console.log('e');
-            },*/
+            },
         });
-        return false;
-    });
+        
+       
+                
+               
+        
+    });*/
     /* $('#salmple').on('click', function(e){
      e.preventDefault();
      $.ajax({
@@ -176,3 +198,12 @@ function fnc_create(e) {
 
     });
 }
+    function fncAwardOthor($this){
+        
+       console.log($($this).val());
+       var tag = $($this);
+       
+       if($($this).val() == 3){
+           tag.parent().html('<input id="'+tag.attr('id')+'" class="'+tag.attr('class')+'" name="'+tag.attr('name')+'" maxlength="32" type="text">');
+       }
+    }

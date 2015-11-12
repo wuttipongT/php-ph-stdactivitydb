@@ -176,7 +176,7 @@ $form = ActiveForm::begin(
                 <?=
                 $form->field($award, 'Award_Id', [
                     'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
+                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control','onchange' => 'js:fncAwardOthor(this)'])->label(FALSE)
                 ?>
             </div>
         </div>
@@ -196,7 +196,7 @@ $form = ActiveForm::begin(
                 <?=
                 $form->field($award, 'Award_Id', [
                     'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
+                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control','onchange' => 'js:fncAwardOthor(this)'])->label(FALSE)
                 ?> 
             </div>
         </div>
@@ -215,7 +215,7 @@ $form = ActiveForm::begin(
                 <?=
                 $form->field($award, 'Award_Id', [
                     'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
+                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control','onchange' => 'js:fncAwardOthor(this)'])->label(FALSE)
                 ?>  
             </div>
         </div>
@@ -234,7 +234,7 @@ $form = ActiveForm::begin(
                 <?=
                 $form->field($award, 'Award_Id', [
                     'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
+                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control','onchange' => 'js:fncAwardOthor(this)'])->label(FALSE)
                 ?>  
             </div>
         </div>
@@ -243,7 +243,7 @@ $form = ActiveForm::begin(
                 <?=
                 $form->field($award, 'Award_Year', [
                     'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
+                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Idrew2rw', 'class' => 'form-control'])->label(FALSE)
                 ?>
             </div>
         </div>

@@ -117,16 +117,18 @@ class SiteController extends Controller {
 
         $model = new LoginForm();
 
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())&& $model->login()) {
-            \Yii::$app->response->format = Response::FORMAT_JSON;
+        if (Yii::$app->request->isAjax && $model->load($_POST/*Yii::$app->request->post()*/)&& $model->login()) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
                 $json = [
                     ['loginform-password'=>'success','redirect' => Yii::$app->urlManager->createUrl(['/info/index'])],
                 ];
-                return $json;
+                
+                return $json;/*\yii\helpers\Json::encode($json);*/
+            
         }else{
-            \Yii::$app->response->format = Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
+            //\Yii::$app->response->format = Response::FORMAT_JSON;
+                return \yii\helpers\Json::encode(ActiveForm::validate($model));
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
