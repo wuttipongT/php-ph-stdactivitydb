@@ -11,7 +11,8 @@ body {
 }
 
 .wrap > .container {
-    padding: 40px 15px 20px;
+    padding: 60px 15px 20px;
+    width: 100%;
 }
 
 .footer {
@@ -98,6 +99,9 @@ a.desc:after {
   }
   .col-sm-6{
       height: 45px;
+  }
+  label.col-sm-2{
+  text-align: left !important;
   }
  .row.vdivide [class*='col-']:not(:last-child):after {
   background: #e0e0e0;

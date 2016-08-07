@@ -5,61 +5,57 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
-
-$this->title = 'My Yii Application';
+///frontend/web/images/phoca_thumb_l_img_5568.jpg
+$this->title = Yii::$app->name;
 ?>
+
 <div class="site-index">
     <div class="body-content">
 
         <div class="row">
             <div class="col-lg-8">
-                <h2>ยินดีต้อนรับ</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p class="text-right" style="padding-right: 10px;"><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-
+                <img src="<?php echo Yii::$app->getUrlManager()->getBaseUrl() ?>/frontend/web/images/TH-COLOR-TPtankhun.png" alt="" style="width: 200px;margin-left: 100px;"/>
+                <h1 style="color:#fff; " class="otto">ระบบฐานข้อมูลกิจกรรมนิสิต</h1>
+                <h3 style="color:#fff; " class="otto">คณะเภสัชศาสตร์ มหาวิทยาลัยมหาสารคาม</h3>
             </div>
-            <div class="col-lg-4 border-left">
+
+            <div class="col-lg-4">
+                <?php if (Yii::$app->user->isGuest): ?>
                 <div class="site-login">
                     <br/>
+                    <div class="col-lg-10 panel panel-default panel-body">
 
-                    <p>กรุณากรอกข้อมูลต่อไปนี้เพื่อเข้าสู่ระบบ:</p>
+                        
 
+                            <?php
+                            $form = ActiveForm::begin([
+                                        'id' => 'login-widget-form',
+                                        'fieldConfig' => [
+                                            'template' => "{input}\n{error}",
+                                        ],
+                                        'action' => $action,
+                                    ])
+                            ?>
 
-                    <div class="col-lg-10">
-                        <?php
-                        $form = ActiveForm::begin([
-                                    'id' => 'login-form',
-                                    'action' => Yii::$app->urlManager->createUrl(['/site/login']),
-                                    'options' => ['class' => 'edit_form'],
-                                    'enableAjaxValidation' => true,
-                                    'enableClientValidation' => true,
-                        ]);
-                        ?>
+                            <?= $form->field($model, 'login')->textInput(['placeholder' => 'Login']) ?>
 
-                        <?= $form->field($model, 'username') ?>
+                            <?= $form->field($model, 'password', ['inputOptions' => ['class' => 'form-control', 'tabindex' => '2']])->passwordInput()->label(Yii::t('user', 'Password')) ?>
 
-                        <?= $form->field($model, 'password')->passwordInput() ?>
+                            <?= $form->field($model, 'rememberMe')->checkbox() ?>
+<?=Html::a(Yii::t('user', 'ลืมรหัสผ่าน?'), ['/user/recovery/request'], ['tabindex' => '5'])?>
+                            <?= Html::submitButton(Yii::t('user', 'Sign in'), ['class' => 'btn btn-primary btn-block']) ?>
 
-                        <?= $form->field($model, 'rememberMe')->checkbox() ?>
+                            <?php ActiveForm::end(); ?>
 
-                        <div style="color:#999;margin:1em 0">
-                            If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
-                        </div>
+                     
 
-                        <div class="form-group">
-                            <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                        </div>
+                            <?php // Html::a(Yii::t('user', 'Logout'), ['/user/security/logout'], ['class' => 'btn btn-danger btn-block', 'data-method' => 'post']) ?>
 
-                        <?php ActiveForm::end(); ?>
+                        
                     </div>
 
                 </div>
-
+<?php endif ?>
             </div>
         </div>
 
@@ -67,25 +63,54 @@ $this->title = 'My Yii Application';
 </div>
 <?php
 Modal::begin(['id' => 'modal',
-    'header' => '<h4>สมัครสมาชิก</h4>']);
+    //'header' => '<h4>สมัครสมาชิก</h4>'
+    ]
+    );
 ?>
-<div class="row">
-    <div class="col-lg-12">
-        <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
-        <?= $form->field($model2, 'username') ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= Html::encode('สมัครสมาชิก') ?></h3>
+            </div>
+            <div class="panel-body">
+                <?php $form = ActiveForm::begin([
+                    'id'                     => 'registration-form',
+                    'enableAjaxValidation'   => true,
+                    'enableClientValidation' => false,
+                    'action' => Yii::$app->urlManager->createUrl(['/user/registration/register']),
+                ]); ?>
 
-        <?= $form->field($model2, 'email') ?>
+                <?= $form->field($model2, 'email') ?>
 
-        <?= $form->field($model2, 'password')->passwordInput() ?>
+                <?= $form->field($model2, 'username') ?>
 
-        <div class="form-group">
-            <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                <?php //if ($module->enableGeneratingPassword == false): ?>
+                    <?= $form->field($model2, 'password')->passwordInput() ?>
+                <?php //endif ?>
+
+                <?= Html::submitButton(Yii::t('user', 'Sign up'), ['class' => 'btn btn-success btn-block']) ?>
+
+                <?php ActiveForm::end(); ?>
+            </div>
         </div>
-
-        <?php ActiveForm::end(); ?>
-    </div>
-</div>
+ 
 <?php
 Modal::end();
 ?>
+
+<style>
+    .otto {
+        text-shadow: 0 1px 0 #ccc,
+            0 2px 0 #c9c9c9,
+            0 3px 0 #bbb,
+            0 4px 0 #b9b9b9,
+            0 5px 0 #aaa,
+            0 6px 1px rgba(0,0,0,.1),
+            0 0 5px rgba(0,0,0,.1),
+            0 1px 3px rgba(0,0,0,.3),
+            0 3px 5px rgba(0,0,0,.2),
+            0 5px 10px rgba(0,0,0,.25),
+            0 10px 10px rgba(0,0,0,.2),
+            0 20px 20px rgba(0,0,0,.15);
+    }
+</style>

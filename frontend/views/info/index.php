@@ -12,13 +12,25 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="info-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <!--<h1><?= Html::encode($this->title) ?></h1>-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
+    
+    <div class="row">
+        <div class="col-sm-2">
+            <ul class="nav nav-pills nav-stacked">
+    <li role="presentation" class="active"><a href="#">รายการ</a></li>
+    <li><a href="#" >ข้อมูลส่วนตัว</a></li>
+    <li><a href="#">ข้อมูลเข้าสู่ระบบ</a></li>
+</ul>
+            
+        </div>
+        <div class="col-sm-10">
+            <h2 class="text-center">ยินดีต้อนรับ <?php echo 'วุฒิพงษ์ ทองมนต์' ?></h2>
+            <?php// echo common\models\User::getName()[0];?>
+         <!--    <p>
         <?= Html::a('Create Info', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
+    </p>-->
+<?php /* ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -51,6 +63,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]); */?>
+        </div>
+    </div>
+
+    
+
+   
 
 </div>

@@ -18,9 +18,30 @@ return [
         'request' => [
             'baseUrl' => $baseUrl,
         ],
-        'user' => [
+       /* 'user' => [
             'identityClass' => 'common\models\User',
+            'identityClass' => 'dektrium\user\models\Admin',
             'enableAutoLogin' => true,
+        ],*/
+        'user' => [
+            'identityCookie' => [
+                'name' => '_backendIdentity',
+                'path' => 'admin',
+                'httpOnly' => true,
+            ],
+        ],
+        'session' => [
+            'name' => 'BACKENDSESSID',
+            //'savePath' => sys_get_temp_dir(),
+            'cookieParams' => [
+                'httpOnly' => true,
+                'path'     => '/',
+            ],
+        ],
+      
+        'student' => [
+            //'identityClass' => 'common\models\User',
+            'class' => 'backend\models\TblStudent',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -41,10 +62,33 @@ return [
             'rules' => array(
                 '' => 'site/index',
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:[-\w]+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:[-\w]+>' => '<controller>/<action>',
+                '<module:\w+>/<controller:\w+>/<action:[-\w]+>' => '<module>/<controller>/<action>',
             ),
         ],
+        'view' => [
+         'theme' => [
+             'pathMap' => [
+                '@backend/views' => '@backend/themes/adminlte'
+             ],
+         ],
+       ],
     ],
     'params' => $params,
+    'modules' => [
+        'user' => [
+           
+           'as backend' => 'dektrium\user\filters\BackendFilter',
+           //'controllers' => ['profile', 'recovery', 'registration', 'settings'],
+           'controllerMap' => [
+                'Security' => 'backend\controllers\SecurityController'],
+           'modelMap' => [
+                'User' => 'backend\models\User'],
+        ],
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module'
+        ],
+    //...
+    ],
 ];

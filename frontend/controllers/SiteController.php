@@ -3,7 +3,7 @@
 namespace frontend\controllers;
 
 use Yii;
-use common\models\LoginForm;
+//use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -15,6 +15,8 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use \yii\widgets\ActiveForm;
 use \yii\web\Response;
+use dektrium\user\models\LoginForm;
+use dektrium\user\models\RegistrationForm;
 /**
  * Site controller
  */
@@ -23,11 +25,14 @@ class SiteController extends Controller {
     /**
      * @inheritdoc
      */
+      /** @var bool */
+    public $validate = true;
+    
     public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup',],
+                'only' => ['logout', 'signup'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -76,16 +81,23 @@ class SiteController extends Controller {
         //findBy(array("ProductID"=>'1'));
         //print_r($comUnit);
         // var_dump($comUnit);
-        if (!\Yii::$app->user->isGuest) {
+        $model  = Yii::createObject(LoginForm::className());
+        $model2 = Yii::createObject(RegistrationForm::className());
+        $action = $this->validate ? null : ['/user/security/login'];
+      /*  if (!\Yii::$app->user->isGuest) {
             //return $this->goHome();
             $this->redirect(Yii::$app->urlManager->createUrl(['/info/index']));
+        }*/
+ if ($this->validate && $model->load(Yii::$app->request->post()) && $model->login()) {
+            //return Yii::$app->response->redirect(Yii::$app->user->returnUrl);
+      $this->redirect(Yii::$app->urlManager->createUrl(['/info/index']));
         }
-
-        $model = new LoginForm();
-        $model2 = new SignupForm();
+//        $model = new LoginForm();
+        //$model2 = new SignupForm();
         return $this->render('index', [
                     'model' => $model,
                     'model2' => $model2,
+                    'action' => $action,
         ]);
     }
 
@@ -276,14 +288,23 @@ if(Yii::$app->request->isAjax){
         ]);
     }
 
-    function actionShowmodal() {
+    function actionRegister() {
         $js = '$("#modal").modal("show")';
         $this->getView()->registerJs($js);
-        $model = new LoginForm();
-        $model2 = new SignupForm();
+        $model  = Yii::createObject(LoginForm::className());
+        $model2 = Yii::createObject(RegistrationForm::className());
+        $action = $this->validate ? null : ['/user/security/login'];
+      /*  if (!\Yii::$app->user->isGuest) {
+            //return $this->goHome();
+            $this->redirect(Yii::$app->urlManager->createUrl(['/info/index']));
+        }*/
+
+//        $model = new LoginForm();
+        //$model2 = new SignupForm();
         return $this->render('index', [
                     'model' => $model,
                     'model2' => $model2,
+                    'action' => $action,
         ]);
     }
 

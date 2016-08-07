@@ -77,7 +77,7 @@ class LoginForm extends Model
     }
     public function attributeLabels(){
          return [
-             'username'=>'หมายเลขประจำตัวนิสิต',
+             'username'=>'',
              'password'=>'รหัสผ่าน',
              'rememberMe'=>'ให้ฉันอยู่ในระบบต่อไป',
          ];

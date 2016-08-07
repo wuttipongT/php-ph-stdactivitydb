@@ -8,254 +8,274 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
-?>
-<?php
-$form = ActiveForm::begin(
-                [
-                    //'action' => '/login',
-                    'options' => [
-                        'class' => 'form-horizontal'
-                    ]
-                ]
-);
-?>
-<div class="my-container">
-    <div class="row">
-        <div class="col-sm-6" style="text-align: center;">
-            ทุนการศึกษาที่เคยได้รับ
-        </div>
-        <div class="col-sm-6" style="text-align: center;">
-            ปีการศึกษาที่ได้รับ (หากเคยได้รับทุน)
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?php $ScholarshipList = ArrayHelper::map($scholarship::find()->where(['Status' => '0'])->all(), 'Scholarship_Id', 'Scholarship_Name'); ?>
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_DESC', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($ScholarshipList, ['rows' => 6, 'id' => 'cboScholarship-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
+use kartik\grid\GridView;
+use yii\bootstrap\Modal;
 
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?php
-                $years = range('2552', '2560'); //range(date("Y"), date("Y", strtotime("now - 100 years")));
+        $gridColumns1 = [
+           // ['class' => 'yii\grid\SerialColumn'],
 
-                foreach ($years as $id => $year) {
+//            'Student_Index',
+  //          'User_Index',
+            'Scholarship_Name',
+            'Scholarship_Year',
+         
 
-                    $list[] = ['id' => $id, 'value' => $year];
+           /* [
+            'class' => 'kartik\grid\ActionColumn', 'urlCreator'=>function(){return '#';},
+            'buttonOptions'=>['class'=>'btn btn-default'],
+            'template'=>'<div class="btn-group btn-group-sm text-center" role="group">{scholarship} {activity} {student} </div>', //{view} {update} {delete}
+            'options'=> ['style'=>'width:150px;'],
+            'buttons'=>[
+              'scholarship' => function($url,$model,$key){
+                  return Html::a('<i class="glyphicon glyphicon-new-window"></i>',Yii::$app->urlManager->createUrl(['student/scholarship?ViewScholarshipSearch[Student_Index]='.$model->Student_Index]),[
+                      'class'=>'btn btn-default activity-view-link',
+                      'title' => Yii::t('yii', 'ข้อมูลทุน'),
+                      'data-toggle' => 'modal',
+                      'data-target' => '#activity-modal',
+                      'data-key' => $key,
+                      'data-pjax' => '0',]);
+                },
+                'activity' => function($url,$model,$key){
+                  return Html::a('<i class="glyphicon glyphicon-link" title="ข้อมูลกิจกรรม"></i>',Yii::$app->urlManager->createUrl(['student/award?ViewAwardSearch[Student_Index]='.$model->Student_Index]),[
+                      'class'=>'btn btn-default activity-view-link',
+                      'title' => Yii::t('yii', 'ข้อมูลกิจกรรม'),
+                      'data-toggle' => 'modal',
+                      'data-target' => '#activity-modal',
+                      'data-key' => $key,
+                      'data-pjax' => '0',]);
+                },
+                'student' => function($url,$model,$key){
+                  return Html::a('<i class="glyphicon glyphicon-eye-open" title="ข้อมูลนิสิต"></i>',Yii::$app->urlManager->createUrl(['student/'.$model->Student_Index]),[
+                      'class'=>'btn btn-default activity-view-link',
+                      'title' => Yii::t('yii', 'ข้อมูลนิสิต'),
+                      'data-toggle' => 'modal',
+                      'data-target' => '#activity-modal',
+                      'data-key' => $key,
+                      'data-pjax' => '0',]);
                 }
-                ?>
-                <?php $dataList = ArrayHelper::map($list, 'id', 'value'); ?>
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'cboScholarship-Year', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
+              ]
+          ],*/
+        ];
+        
+        $gridColumns2 = [
 
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_DESC', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($ScholarshipList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
+            'Award_Name',
+            'Award_Year',
+            
+            ];
+         $gridColumns3 = [
 
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_DESC', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($ScholarshipList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
+            'Activity_Name',
+            'Type_Name',
+            'str1',
+            'str2',
+            'str3',
+            'str4',
+            'str5',
+            'Activity_Year',
+             
+            ];
+        
+        $gridColumns4 = [
 
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_DESC', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($ScholarshipList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
+            'Club_Name',
+            'Description',
+            'Position_Year',
+            'str1'
+            
+            ];
+        
+?>
+    <?= GridView::widget([        
+    'dataProvider' => $scholarshipDataProvider,
+      //  'filterModel' => $searchModel,
+    'columns' =>  $gridColumns1 ,
+    //'pjax' => true,
+   // 'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+    'panel' => [
+        'type' => GridView::TYPE_DEFAULT,
+        'heading' => FALSE,//'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> ข้อมูลทุนการศึกษา</h3>',
+        'footer'=>false
+    ],
+    
+    // set a label for default menu
+    'export' => FALSE,
+    // your toolbar can include the additional full export menu
+    'toolbar' => FALSE,
+    'showPageSummary' => FALSE,  
+    
+    
+    ]); ?>
+<button data-href="<?=Yii::$app->urlManager->createUrl(['/info/create'])?>" id="aAdd-scholarship" type="button" class="btn btn-primary btn-sm activity-view-link" data-ajax="3" data-seq="1" onclick="infoCreate(this)">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> เพิ่ม
+</button>
+<button data-href="<?=Yii::$app->urlManager->createUrl(['/info/update'])?>" id="aRem-scholarship" type="button" class="btn btn-default btn-sm activity-view-link" data-ajax="3" data-seq="1" onclick="infoUpdate(this)">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> แก้ไข
+</button>
+<hr/>
+<?= GridView::widget([        
+    'dataProvider' => $awardDataProvider,
+      //  'filterModel' => $searchModel,
+    'columns' =>  $gridColumns2 ,
+    //'pjax' => true,
+   // 'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+    'panel' => [
+        'type' => GridView::TYPE_DEFAULT,
+        'heading' => FALSE,//'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> ข้อมูลทุนการศึกษา</h3>',
+        'footer'=>false
+    ],
+    
+    // set a label for default menu
+    'export' => FALSE,
+    // your toolbar can include the additional full export menu
+    'toolbar' => FALSE,
+    'showPageSummary' => FALSE,  
+    
+    
+    ]); ?>
+<button id="aAdd-award" type="button" class="btn btn-primary btn-sm" data-href="<?=Yii::$app->urlManager->createUrl(['/info/create'])?>" data-ajax="3" data-seq="2" onclick="infoCreate(this)">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> เพิ่ม
+            </button>
+            <button id="btnRem-award" type="button" class="btn btn-default btn-sm" data-href="<?=Yii::$app->urlManager->createUrl(['/info/update'])?>" data-ajax="3" data-seq="2" onclick="infoUpdate(this)">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> แก้ไข
+            </button>
+<hr/>
+<?= GridView::widget([        
+    'dataProvider' => $activityDataProvider,
+      //  'filterModel' => $searchModel,
+    'columns' =>  $gridColumns3 ,
+    //'pjax' => true,
+   // 'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+    'panel' => [
+        'type' => GridView::TYPE_DEFAULT,
+        'heading' => FALSE,//'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> ข้อมูลทุนการศึกษา</h3>',
+        'footer'=>false
+    ],
+    
+    // set a label for default menu
+    'export' => FALSE,
+    // your toolbar can include the additional full export menu
+    'toolbar' => FALSE,
+    'showPageSummary' => FALSE,  
+    
+    
+    ]); ?>
+ <button id="aAdd-Activ" type="button" class="btn btn-primary btn-sm" data-href="<?=Yii::$app->urlManager->createUrl(['/info/create'])?>" data-ajax="3" data-seq="3" onclick="infoCreate(this)">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> เพิ่ม
+            </button>
+            <button id="btnRem-Activ" type="button" class="btn btn-default btn-sm" data-href="<?=Yii::$app->urlManager->createUrl(['/info/update'])?>" data-ajax="3" data-seq="3" onclick="infoUpdate(this)">
+              <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> แก้ไข
+            </button>
+<hr/>
+<?= GridView::widget([        
+    'dataProvider' => $positionDataProvider,
+      //  'filterModel' => $searchModel,
+    'columns' =>  $gridColumns4 ,
+    //'pjax' => true,
+   // 'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+    'panel' => [
+        'type' => GridView::TYPE_DEFAULT,
+        'heading' => FALSE,//'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> ข้อมูลทุนการศึกษา</h3>',
+        'footer'=>false
+    ],
+    
+    // set a label for default menu
+    'export' => FALSE,
+    // your toolbar can include the additional full export menu
+    'toolbar' => FALSE,
+    'showPageSummary' => FALSE,  
+    
+    
+    ]); ?>
 
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_DESC', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($ScholarshipList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
+ <button id="aAdd-posi" type="button" class="btn btn-primary btn-sm" data-href="<?=Yii::$app->urlManager->createUrl(['/info/create'])?>" data-ajax="3" data-seq="4" onclick="infoCreate(this)">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> เพิ่ม
+            </button>
+            <button id="btnRem-posi" type="button" class="btn btn-default btn-sm" data-href="<?=Yii::$app->urlManager->createUrl(['/info/update'])?>" data-ajax="3" data-seq="4" onclick="infoUpdate(this)">
+              <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> แก้ไข
+            </button>
 
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_DESC', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($ScholarshipList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($tb_Scholarship, 'Scholarship_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-    </div>
+ <?php Modal::begin([
+        'id' => 'activity-modal',
+        //'header' => '<h4 class="modal-title">สมาชิก</h4>',
+        'size'=>'modal-lg',
+        //'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">ปิด</a>',
+        ]);
+        Modal::end();
+?>
+<style>
+    .modal-backdrop {
+    background-color: #FFF !important;
+   
+   
+}
+.form-group{margin-left: -10px !important;margin-right: -10px !important;}
+.modal-content{background-color: #FFF !important;border-radius: 0 !important;padding: 8px; overflow:auto;}
+</style>
 
-    <div class="row">
-        <div class="col-sm-6" style="text-align: center;">
-            รางวัลที่เคยได้รับ
-        </div>
-        <div class="col-sm-6" style="text-align: center;">
-            ปีการศึกษาที่ได้รับ (หากเคยได้รับรางวัล)
-        </div>
+<script>
+    function infoCreate(_this){
+        var url = $(_this).data("href");
+        var isAjax =  $(_this).data("ajax");
+        var seq = $(_this).data("seq");
+         
+        $.post(
+                url,
+                {
+                    isAjax: isAjax,
+                    seq: seq
+                },
+                function (data)
+                {
+                    //$("#activity-modal").find(".modal-body").html(data);
+                    $(".modal-body").html(data);
+                    $("#activity-modal").modal("show");
+                   
+                }
+        ); 
+        return false;
+    }
+        function infoUpdate(_this){
+        var url = $(_this).data("href");
+        var isAjax =  $(_this).data("ajax");
+        var seq = $(_this).data("seq");
+         
+        $.post(
+                url,
+                {
+                    isAjax: isAjax,
+                    seq: seq
+                },
+                function (data)
+                {
+                    //$("#activity-modal").find(".modal-body").html(data);
+                    $(".modal-body").html(data);
+                    $("#activity-modal").modal("show");
+                   
+                }
+        ); 
+        return false;
+    }
+function init_click_handlers(){
+$(document).on('click', '.activity-view-link', function (e) {
+ 
 
+            //var fID = $(this).closest("tr").data("key");
+            //var url = $(this).attr("href");
+            $.get(
+                url,
+                {
+                    id: 1
+                },
+                function (data)
+                {
+                    //$("#activity-modal").find(".modal-body").html(data);
+                    //$(".modal-body").html(data);
+                    $("#activity-modal").modal("show");
+                }
+            );
+        });
 
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?php
-                $awords = [
-                    ['id' => 0, 'value' => 'เรียนดีระดับมหาวิทยาลัย'],
-                    ['id' => 1, 'value' => 'เรียนดีระดับคณะเภสัชศาสตร์'],
-                    ['id' => 2, 'value' => 'ผู้มีจิตอาสาประจำชั้นปี'],
-                    ['id' => 3, 'value' => 'อื่นๆ (โปรดระบุ)'],
-                ];
-                ?>
-                <?php $awardsList = ArrayHelper::map($awords, 'id', 'value'); ?>
-                <?=
-                $form->field($award, 'Award_Id', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control','onchange' => 'js:fncAwardOthor(this)'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?php $dataList = ArrayHelper::map($list, 'id', 'value'); ?>
-                <?=
-                $form->field($award, 'Award_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($award, 'Award_Id', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control','onchange' => 'js:fncAwardOthor(this)'])->label(FALSE)
-                ?> 
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($award, 'Award_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($award, 'Award_Id', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control','onchange' => 'js:fncAwardOthor(this)'])->label(FALSE)
-                ?>  
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($award, 'Award_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($award, 'Award_Id', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($awardsList, ['rows' => 6, 'id' => 'txtAdvisors-Id', 'class' => 'form-control','onchange' => 'js:fncAwardOthor(this)'])->label(FALSE)
-                ?>  
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="my-inner">
-                <?=
-                $form->field($award, 'Award_Year', [
-                    'template' => "{input}\n{hint}\n{error}"
-                ])->dropDownList($dataList, ['rows' => 6, 'id' => 'txtAdvisors-Idrew2rw', 'class' => 'form-control'])->label(FALSE)
-                ?>
-            </div>
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col-sm-12" style="text-align: right;">
-            <div class="form-group">
-                <?= Html::submitButton($award->isNewRecord ? 'Create' : 'Update', ['class' => $award->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-<?php ActiveForm::end(); ?>
+}
+init_click_handlers();
+</script>

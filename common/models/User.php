@@ -185,5 +185,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+    
+    public static function getName(){
+        return \frontend\models\Info::find()->select('Student_Name')->where(['Student_Id'=>Yii::$app->user->identity->username])->column();
+    }
      
 }

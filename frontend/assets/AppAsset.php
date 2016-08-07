@@ -19,9 +19,12 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+        'css/lobibox.css',
     ];
     public $js = [
         'js/script.js',
+        'js/Lobibox.js',
+        'js/notifications.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
